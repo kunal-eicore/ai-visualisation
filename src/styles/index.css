@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * DESIGN.md §2.2 semantic tokens, stored as space-separated RGB so
+   * Tailwind's `/<alpha-value>` modifier works (e.g. `bg-primary/70`).
+   * Light only — see the dark-mode note in tailwind.config.js and README.
+   */
+  :root {
+    --surface-page:   242 242 245; /* #f2f2f5 */
+    --surface-card:   255 255 255; /* #ffffff */
+    --surface-raised: 255 255 255; /* #ffffff */
+    --surface-sunken: 234 234 239; /* #eaeaef */
+
+    --text-default:    17  17  24; /* #111118 */
+    --text-subtle:     58  58  72; /* #3a3a48 */
+    --text-muted:     120 120 160; /* #7878a0 */
+    --text-disabled:  176 176 196; /* #b0b0c4 */
+    --text-inverse:   255 255 255; /* #ffffff */
+
+    --border-default: 228 228 236; /* #e4e4ec */
+    --border-subtle:  234 234 239; /* #eaeaef */
+    --border-strong:  208 208 222; /* #d0d0de */
+
+    --primary:         80  70 229; /* #5046e5 — button/primary/bg */
+
+    /*
+     * "Look here" — held on a surface the copilot has just sent you to, then
+     * released (`ring()` in routes/copilot/UwAgent).
+     *
+     * A token here rather than a Tailwind utility on purpose. This signal is
+     * applied imperatively to a node that React is not re-rendering, so it
+     * must not depend on a class that a running dev server may not have
+     * generated yet — a new entry in tailwind.config.js is only picked up
+     * when the config is reloaded, and everything else on the screen animates
+     * from entries that were already there. A custom property in the CSS
+     * entry hot-reloads with the stylesheet, so this cannot go stale.
+     *
+     * A shadow rather than a keyframe, for the same reason it is not an
+     * animation: it carries meaning (which of three cards just moved), so it
+     * has to survive `prefers-reduced-motion`, where the rule below would
+     * collapse an animation to 0.01ms and it would never be seen.
+     */
+    --ring-flash: 0 0 0 3px #a39df3, 0 0 20px 4px #dbd8fb; /* brand/400, brand/200 */
+
+    /*
+     * The arrival glow on an area that is waiting on YOU.
+     *
+     * A different job from `--ring-flash` and therefore a different colour:
+     * the flash answers a request you made, this one reports one made of
+     * you. Warning rather than brand because brand is what the agent's own
+     * work is drawn in, and this is the opposite claim — the agent stopped
+     * here.
+     *
+     * It fades. Holding it for as long as the handoff is open sounded right
+     * and was not: the thing it marks can sit unanswered for the whole time
+     * you are working the step, and a glow that outlasts its news stops
+     * being read at all. So it says "here" on arrival and then gets out of
+     * the way — the notice band inside the card is the standing state, and
+     * that one does not go anywhere until the task is settled.
+     *
+     * Softer than the flash for the same reason: this one appears without
+     * being asked for, so it has to be quieter than the one that does not.
+     */
+    --ring-attention: 0 0 0 1px #fcd28a, 0 0 16px 2px #fef6e7; /* warning/200, warning/50 */
+  }
+
+  html, body, #root { height: 100%; }
+
+  /* §2.3 global: 14px body anchor. */
+  body {
+    @apply bg-surface-page font-sans text-base text-default antialiased;
+  }
+
+  /* Applied to the surface a handoff is waiting on. A real stylesheet rule
+     rather than an inline style, so `lib/ring` can still flash over it and
+     fall back to it when the flash clears. */
+  .ring-attention { box-shadow: var(--ring-attention); }
+
+  /* §2.7 — honour the OS reduce-motion setting. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
