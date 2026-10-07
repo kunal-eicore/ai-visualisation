@@ -191,6 +191,34 @@ export default {
           '0%':   { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(200%)' },
         },
+        /* The autonomous run's line: dashes flowing from intake to the
+         * ledger. One dash period (2 + 8) per cycle, so the loop is seamless. */
+        rail: {
+          '0%':   { strokeDashoffset: '0' },
+          '100%': { strokeDashoffset: '-10' },
+        },
+        /* A decided case landing in the ledger: it arrives a size up and
+         * presses down, overshooting a touch — a stamp, not a fade. */
+        stamp: {
+          '0%':   { opacity: '0', transform: 'scale(1.6) rotate(-8deg)' },
+          '55%':  { opacity: '1', transform: 'scale(0.92) rotate(1deg)' },
+          '100%': { opacity: '1', transform: 'scale(1) rotate(0)' },
+        },
+        /* A case whose tool call just failed: one red pulse round the card
+         * per retry. Danger ramp, the error colour. */
+        'flash-danger': {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(0,0,0,0)' },
+          '35%':      { boxShadow: `0 0 0 4px ${ramp.danger[200]}` },
+        },
+        'sheet-in': {
+          '0%':   { transform: 'translateX(24px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        /* System view opens out of its button in the top-right corner. */
+        'view-in': {
+          '0%':   { opacity: '0', transform: 'scale(0.97)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
       },
       animation: {
         'fade-up': 'fade-up 220ms cubic-bezier(0.4,0,0.2,1) both',
@@ -208,6 +236,11 @@ export default {
         skeleton:   'skeleton-in 450ms cubic-bezier(0,0,0.2,1) both',
         'row-pulse': 'row-pulse 2.1s cubic-bezier(0.4,0,0.2,1) infinite',
         reveal:     'reveal 550ms cubic-bezier(0.22,1,0.36,1) both',
+        rail:       'rail 700ms linear infinite',
+        stamp:      'stamp 420ms cubic-bezier(0.22,1,0.36,1) both',
+        'flash-danger': 'flash-danger 900ms cubic-bezier(0.4,0,0.2,1) 1',
+        'sheet-in': 'sheet-in 280ms cubic-bezier(0.22,1,0.36,1) both',
+        'view-in':  'view-in 260ms cubic-bezier(0.22,1,0.36,1) both',
       },
     },
   },

@@ -17,6 +17,7 @@ export function IntentScreen() {
         pendingLabel: 'Thinking',
         respond: (text) => respondIntent(text),
         empty: (fill) => <CapabilityGrid onPick={fill} />,
+        hero: <h1 className="text-center text-3xl font-semibold text-default">What should we get done today?</h1>,
       }}
       composer={{
         placeholder: 'Describe what you want done',

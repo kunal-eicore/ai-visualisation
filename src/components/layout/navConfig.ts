@@ -35,7 +35,10 @@ export const PRIMARY_NAV: NavItem[] = [
     label: 'Harness',
     icon: Cable,
     to: '/harness',
-    children: [{ label: 'Model Setup', to: '/harness/setup' }],
+    children: [
+      { label: 'Model Setup', to: '/harness/setup' },
+      { label: 'Connectors', to: '/harness/connectors' },
+    ],
   },
   {
     label: 'Quotation',

@@ -1,7 +1,7 @@
 /**
  * The four modes of the Fully Autonomous block. Manual is the underwriting
- * queue as it stands; the other three are empty until their content is
- * described.
+ * queue as it stands, Intent based is the centred chat, Autonomous is the
+ * agent run. Hybrid is empty until its content is described.
  *
  * Separate from `lib/autonomy` on purpose: that ladder (with AI-assisted)
  * belongs to the group health journey, and this switch exists only on

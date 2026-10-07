@@ -75,7 +75,7 @@ export function ConnectorsMenu({
         >
           {linked.slice(0, STACK).map((c, i) => (
             <Ringed key={c.id} first={i === 0}>
-              <Tile item={c} />
+              <ConnectorTile item={c} />
             </Ringed>
           ))}
           {linked.length > STACK && (
@@ -96,7 +96,7 @@ export function ConnectorsMenu({
         >
           {items.map((c) => (
             <div key={c.id} className="flex h-10 items-center gap-2.5 rounded-sm px-2.5">
-              <Tile item={c} />
+              <ConnectorTile item={c} />
               <span className="min-w-0 flex-1 truncate text-sm font-medium text-default">{c.label}</span>
               <Switch checked={on.includes(c.id)} onChange={() => onToggle(c.id)} label={`Connect ${c.label}`} />
             </div>
@@ -107,11 +107,20 @@ export function ConnectorsMenu({
   )
 }
 
-function Tile({ item }: { item: ConnectorItem }) {
+/** A connector's coin. Shared with the Connectors screen, which draws it
+ *  larger in its list and catalog. */
+export function ConnectorTile({ item, size = 'sm' }: { item: Pick<ConnectorItem, 'icon' | 'tone'>; size?: 'sm' | 'md' }) {
   const Icon = item.icon
   return (
-    <span aria-hidden className={cn('inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border', TONE[item.tone])}>
-      <Icon className="h-3.5 w-3.5" />
+    <span
+      aria-hidden
+      className={cn(
+        'inline-flex shrink-0 items-center justify-center rounded-full border',
+        size === 'sm' ? 'h-6 w-6' : 'h-8 w-8',
+        TONE[item.tone],
+      )}
+    >
+      <Icon className={size === 'sm' ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
     </span>
   )
 }

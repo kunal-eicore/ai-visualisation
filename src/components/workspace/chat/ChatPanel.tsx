@@ -72,6 +72,8 @@ export type ChatConversationConfig<T extends AgentTurnBase> = {
   /** `centre` only: shown under the box until the first message. `fill`
    *  puts text in the box. */
   empty?: (fill: (text: string) => void) => ReactNode
+  /** `centre` only: shown above the box until the first message. */
+  hero?: ReactNode
 }
 
 /** `centre` only: a control that clears the conversation, shown once it
@@ -176,7 +178,12 @@ export function ChatPanel<T extends AgentTurnBase>({
       {conversation.before}
 
       {entries.map((entry, i) => (
-        <Bubble key={i} user={entry.role === 'user'} text={entry.role === 'user' ? entry.text : entry.turn.text}>
+        <Bubble
+          key={i}
+          user={entry.role === 'user'}
+          framed={layout === 'centre'}
+          text={entry.role === 'user' ? entry.text : entry.turn.text}
+        >
           {entry.role === 'agent' && (
             <>
               {conversation.renderExtras?.(entry.turn, i)}
@@ -227,7 +234,7 @@ export function ChatPanel<T extends AgentTurnBase>({
        Before, two equal flex halves put the box on the vertical middle with
        the empty-state content starting under it. */
     return (
-      <section aria-label={ariaLabel} className={cn('relative flex h-full flex-col', !started && 'overflow-y-auto')}>
+      <section aria-label={ariaLabel} className={cn('relative flex h-full flex-col bg-surface-card', !started && 'overflow-y-auto')}>
         {started && newChat && (
           <div className="mx-auto flex w-full shrink-0 justify-end px-6 pt-4" style={column}>
             <Button
@@ -245,7 +252,13 @@ export function ChatPanel<T extends AgentTurnBase>({
             <div className="mx-auto flex w-full flex-col gap-4 px-6 py-8" style={column}>{feedItems}</div>
           </div>
         ) : (
-          <div className="min-h-[40px] flex-1" />
+          <div className="flex min-h-[40px] flex-1 flex-col justify-end px-6">
+            {conversation.hero && (
+              <div className="mx-auto w-full pb-8 pt-10" style={columnInner}>
+                {conversation.hero}
+              </div>
+            )}
+          </div>
         )}
         <div className={cn('shrink-0 px-6', started && 'pb-6')}>
           <div className="mx-auto w-full rounded-lg shadow-classic" style={columnInner}>{composerBox}</div>
@@ -334,7 +347,47 @@ export function ChatPanel<T extends AgentTurnBase>({
   )
 }
 
-function Bubble({ user, text, children }: { user: boolean; text: string; children?: ReactNode }) {
+/**
+ * `framed` is the centre layout's chat: each message in a bordered bubble,
+ * yours on the right without an avatar, the agent's on the left with one.
+ * The docks keep the flat avatar rows.
+ */
+function Bubble({
+  user,
+  framed = false,
+  text,
+  children,
+}: {
+  user: boolean
+  framed?: boolean
+  text: string
+  children?: ReactNode
+}) {
+  if (framed && user) {
+    return (
+      <div className="flex justify-end">
+        <p className="max-w-[80%] rounded-lg border border-default bg-surface-sunken px-4 py-2.5 text-base text-default">
+          {text}
+        </p>
+      </div>
+    )
+  }
+  if (framed) {
+    return (
+      <div className="flex gap-2.5">
+        <span
+          aria-hidden
+          className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-brand bg-brand-bg text-brand-fg"
+        >
+          <Bot className="h-3.5 w-3.5" />
+        </span>
+        <div className="flex min-w-0 max-w-[80%] flex-col gap-2 rounded-lg border border-default bg-surface-card px-4 py-3">
+          <p className="text-base text-default">{text}</p>
+          {children}
+        </div>
+      </div>
+    )
+  }
   const Icon = user ? UserRound : Bot
   return (
     <div className="flex gap-2.5">

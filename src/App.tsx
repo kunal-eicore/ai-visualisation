@@ -8,6 +8,7 @@ import { ShadowParity } from '@/routes/evaluation/ShadowParity'
 import { Workbench } from '@/routes/evaluation/workbench/Workbench'
 import { UwAgent } from '@/routes/copilot/UwAgent'
 import { Harness } from '@/routes/harness/Harness'
+import { Connectors } from '@/routes/harness/connectors/Connectors'
 import { Autonomous } from '@/routes/autonomous/Autonomous'
 import { GroupHealthQuotation } from '@/routes/quotation/group-health/GroupHealthQuotation'
 
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="evaluation/workbench" element={<Workbench />} />
         <Route path="harness" element={<Navigate to="/harness/setup" replace />} />
         <Route path="harness/setup" element={<Harness />} />
+        <Route path="harness/connectors" element={<Connectors />} />
         <Route path="quotation" element={<Navigate to="/quotation/group-health" replace />} />
         <Route path="quotation/group-health" element={<GroupHealthQuotation />} />
         <Route path="autonomous" element={<Autonomous />} />
