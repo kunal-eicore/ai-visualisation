@@ -19,7 +19,8 @@ npm run build    # lint:glyphs + tsc -b + vite build
 | `/evaluation/shadow-parity` | Drift between an underwriter's decision and a shadow agent's on the same frozen input |
 | `/evaluation/workbench` | A dedicated surface for building an agentic workflow against a recorded event stream and testing it |
 | `/harness/setup` | Pointing a tenant's own model accounts at our MCP, intelligence and semantic layers — bring your own key |
-| `/autonomous` | Fully Autonomous (intent-based workflows with little to no human intervention). Step one: the onebuzz underwriting queue, rebuilt for readability |
+| `/autonomous` | Fully Autonomous: four modes over the onebuzz underwriting queue. Manual (the queue), Hybrid (the queue, with steps handed to agents one case, a batch, or a standing automation at a time), Autonomous (agents run the whole line), Intent based (one box) |
+| `/autonomous/settings` | Agent settings shared by Hybrid and Autonomous: on/off, role, cases at once, approval, retries, timeout, instructions, connectors (per agent or shared) |
 | `/copilot/uw-agent` | A chat window paired with the pricing surface it operates on, and the function calls between them |
 | `/quotation/group-health` | The Onebuzz group health quotation run, rebuilt as a seven-step walkthrough, runnable at four autonomy modes |
 

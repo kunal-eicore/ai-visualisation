@@ -179,7 +179,8 @@ function scriptFor(r: QueueRow, extraBlock?: { stage: number; reason: string }):
   }
 }
 
-const QUEUE_SCRIPTS = ROWS.filter((r) => r.quotationNo).map((r) => scriptFor(r))
+/** The queue as it stands: the cases the run opens with, and all Hybrid works. */
+export const QUEUE_SCRIPTS = ROWS.filter((r) => r.quotationNo).map((r) => scriptFor(r))
 
 let blocked = 0
 const LARGE_SCRIPTS = LARGE_EXTRA.map((r) =>

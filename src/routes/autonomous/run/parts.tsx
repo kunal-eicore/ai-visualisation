@@ -1,4 +1,4 @@
-import { Building2, Pause, User } from 'lucide-react'
+import { Building2, Pause, Power, User } from 'lucide-react'
 import { TONE } from '@/components/ui/Badge'
 import { Throbber } from '@/components/ui/Throbber'
 import { cn } from '@/lib/cn'
@@ -115,8 +115,16 @@ export function LedgerChip({ c, fresh, onOpen }: { c: CaseState; fresh: boolean;
 }
 
 /** The station's mark on the rail. Its throbber waves while the agent has a
- *  case in hand and settles back to a ring when it has none. */
-export function StageNode({ active, jammed = false }: { active: boolean; jammed?: boolean }) {
+ *  case in hand and settles back to a ring when it has none. A station with
+ *  no active agent is a hollow dashed node with a power mark. */
+export function StageNode({ active, jammed = false, off = false }: { active: boolean; jammed?: boolean; off?: boolean }) {
+  if (off) {
+    return (
+      <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-dashed border-strong bg-surface-sunken text-muted">
+        <Power aria-hidden className="h-3.5 w-3.5" />
+      </span>
+    )
+  }
   return (
     <span
       className={cn(

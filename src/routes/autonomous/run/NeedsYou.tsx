@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp, CircleX, TriangleAlert } from 'lucide-react'
+import { CheckCheck, ChevronDown, ChevronUp, CircleX, TriangleAlert } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
-import { casesOf, needsPerson, stoppedAt, type CaseState, type RunState } from './engine'
+import { casesOf, needsPerson, stopReason, stoppedAt, type CaseState, type RunState } from './engine'
 import { useFlip } from './flip'
 import { SegmentIcon, clientOf } from './parts'
 import { SCRIPT_BY_ID, STAGES } from './script'
@@ -14,8 +14,9 @@ const IN_LANE = 3
 export const ATTENTION = 'Needs your attention'
 
 /**
- * Cases an agent stopped on: missing information (warning) or a tool that
- * kept failing (danger). A case drops out of its station into this lane and
+ * Cases an agent stopped on: missing information or a step whose agent is
+ * off (warning), a tool that kept failing (danger), or output waiting for a
+ * person's approval (info). A case drops out of its station into this lane and
  * goes back to the front of the same station once someone unblocks or
  * retries it.
  *
@@ -30,7 +31,8 @@ export function NeedsYou({ state, onOpen }: { state: RunState; onOpen: (id: stri
     .filter(needsPerson)
     .sort((a, b) => stoppedAt(a) - stoppedAt(b))
   const errors = stopped.filter((c) => c.phase === 'failed').length
-  const warnings = stopped.length - errors
+  const approvals = stopped.filter((c) => c.phase === 'approval').length
+  const warnings = stopped.length - errors - approvals
   const more = stopped.length > IN_LANE
 
   useEffect(() => {
@@ -51,9 +53,9 @@ export function NeedsYou({ state, onOpen }: { state: RunState; onOpen: (id: stri
   const heading = (toggle: 'open' | 'close' | null) => (
     <div className="flex items-center gap-2">
       <h2 className="text-sm font-semibold text-default">{ATTENTION}</h2>
-      {/* Two counts, not one: a warning waits on information, an error on a
-          retry, and they are worked differently. Icon as well as colour, so
-          the pair reads without the colour. */}
+      {/* One count per kind, not one total: a warning waits on information,
+          an error on a retry, an approval on a yes, and each is worked
+          differently. Icon as well as colour, so they read without colour. */}
       {warnings > 0 && (
         <span aria-label={`${warnings} ${warnings === 1 ? 'warning' : 'warnings'}`}>
           <Badge tone="warning" icon={<TriangleAlert aria-hidden className="h-3 w-3" />}>
@@ -65,6 +67,13 @@ export function NeedsYou({ state, onOpen }: { state: RunState; onOpen: (id: stri
         <span aria-label={`${errors} ${errors === 1 ? 'error' : 'errors'}`}>
           <Badge tone="danger" icon={<CircleX aria-hidden className="h-3 w-3" />}>
             {errors}
+          </Badge>
+        </span>
+      )}
+      {approvals > 0 && (
+        <span aria-label={`${approvals} waiting for approval`}>
+          <Badge tone="info" icon={<CheckCheck aria-hidden className="h-3 w-3" />}>
+            {approvals}
           </Badge>
         </span>
       )}
@@ -126,13 +135,14 @@ function StoppedCard({ c, onOpen }: { c: CaseState; onOpen: (id: string) => void
   const ref = useFlip<HTMLLIElement>(c.id)
   const s = SCRIPT_BY_ID[c.id]
   const failed = c.phase === 'failed'
-  const reason = failed ? [...c.trace].reverse().find((t) => t.kind === 'error')?.text : s.block?.reason
+  const approval = c.phase === 'approval'
+  const reason = stopReason(c)
   return (
     <li
       ref={ref}
       className={cn(
         'relative flex h-[84px] min-w-0 items-start gap-3 rounded-lg border px-4 py-3',
-        failed ? 'border-danger bg-danger-bg' : 'border-warning bg-warning-bg',
+        failed ? 'border-danger bg-danger-bg' : approval ? 'border-info bg-info-bg' : 'border-warning bg-warning-bg',
       )}
     >
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">

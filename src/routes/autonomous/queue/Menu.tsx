@@ -3,7 +3,16 @@ import { createPortal } from 'react-dom'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/cn'
 
-export type MenuItem = { key: string; label: string; disabled?: boolean }
+export type MenuItem = {
+  key: string
+  label: string
+  disabled?: boolean
+  /** A short state on the right of the item, in mono ("Off", "Done"). */
+  meta?: string
+  /** Set on an on/off item: it draws a switch, and choosing it flips the
+   *  switch without closing the menu. */
+  checked?: boolean
+}
 
 /**
  * §4.3 menu container — surface card, radius 8, padding 4, items radius 4
@@ -87,19 +96,22 @@ export function Menu({
                 <button
                   key={item.key}
                   type="button"
-                  role="menuitem"
+                  role={item.checked === undefined ? 'menuitem' : 'menuitemcheckbox'}
+                  aria-checked={item.checked}
                   disabled={item.disabled}
                   onClick={() => {
                     onSelect(item.key)
-                    setOpen(false)
+                    if (item.checked === undefined) setOpen(false)
                   }}
                   className={cn(
                     'flex h-8 w-full items-center gap-2 rounded-sm px-2.5 text-left text-sm font-medium transition-colors duration-base',
                     'focus-visible:outline-none focus-visible:shadow-focus disabled:cursor-not-allowed disabled:text-disabled',
-                    selected ? 'bg-brand-bg text-brand-fg' : 'text-default hover:bg-surface-sunken',
+                    selected ? 'bg-brand-bg text-brand-fg' : 'text-default hover:bg-surface-sunken disabled:hover:bg-transparent',
                   )}
                 >
                   <span className="flex-1 truncate">{item.label}</span>
+                  {item.meta && <span className="shrink-0 font-mono text-xs font-normal text-muted">{item.meta}</span>}
+                  {item.checked !== undefined && <SwitchMark on={item.checked} disabled={item.disabled} />}
                   {selected && <Check aria-hidden className="h-3.5 w-3.5" />}
                 </button>
               )
@@ -108,5 +120,26 @@ export function Menu({
           document.body,
         )}
     </>
+  )
+}
+
+/** The look of `Switch`, drawn inside a menu item: the item is the control,
+ *  so the switch itself must not be a second button. */
+function SwitchMark({ on, disabled }: { on: boolean; disabled?: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        'relative h-5 w-9 shrink-0 rounded-full transition-colors duration-base',
+        disabled ? 'bg-neutral-200' : on ? 'bg-brand-500' : 'bg-neutral-300',
+      )}
+    >
+      <span
+        className={cn(
+          'absolute top-0.5 h-4 w-4 rounded-full bg-surface-card shadow-card transition-all duration-base',
+          on ? 'left-[18px]' : 'left-0.5',
+        )}
+      />
+    </span>
   )
 }

@@ -36,7 +36,7 @@ export function RunScreen() {
 }
 
 function Run({ scenario, onScenario }: { scenario: ScenarioId; onScenario: (s: ScenarioId) => void }) {
-  const { state, dispatch, complete } = useRun(scenario)
+  const { state, dispatch, complete, settings } = useRun(scenario)
   const [openId, setOpenId] = useState<string | null>(null)
   const [system, setSystem] = useState(false)
 
@@ -99,7 +99,7 @@ function Run({ scenario, onScenario }: { scenario: ScenarioId; onScenario: (s: S
       {/* No bottom padding here: the columns carry it, so the line fills the
           area and the Decided column's divider runs to the bottom edge. */}
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-8 pt-6">
-        <Line state={state} selected={openId} onOpen={setOpenId} />
+        <Line state={state} settings={settings} selected={openId} onOpen={setOpenId} />
       </div>
 
       <NeedsYou state={state} onOpen={setOpenId} />
@@ -116,6 +116,8 @@ function Run({ scenario, onScenario }: { scenario: ScenarioId; onScenario: (s: S
           onPause={() => dispatch({ type: 'pauseCase', id: open.id })}
           onUnblock={() => dispatch({ type: 'unblock', id: open.id })}
           onRetry={() => dispatch({ type: 'retry', id: open.id })}
+          onApprove={() => dispatch({ type: 'approve', id: open.id })}
+          onComplete={() => dispatch({ type: 'complete', id: open.id })}
         />
       )}
     </div>

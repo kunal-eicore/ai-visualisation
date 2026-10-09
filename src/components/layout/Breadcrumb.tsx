@@ -10,6 +10,8 @@ const SEGMENT_LABELS: Record<string, string> = {
   workbench: 'Eval Workbench',
   copilot: 'Copilot',
   'uw-agent': 'UW Agent',
+  autonomous: 'Fully Autonomous',
+  settings: 'Agent settings',
 }
 
 function labelFor(segment: string) {

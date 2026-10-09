@@ -46,7 +46,15 @@ export const PRIMARY_NAV: NavItem[] = [
     to: '/quotation',
     children: [{ label: 'Group Health', to: '/quotation/group-health' }],
   },
-  { label: 'Fully Autonomous', icon: Orbit, to: '/autonomous' },
+  {
+    label: 'Fully Autonomous',
+    icon: Orbit,
+    to: '/autonomous',
+    children: [
+      { label: 'Underwriting', to: '/autonomous' },
+      { label: 'Agent settings', to: '/autonomous/settings' },
+    ],
+  },
   {
     label: 'Copilot',
     icon: Bot,

@@ -1,5 +1,6 @@
-import { useEffect, useReducer } from 'react'
-import { initialRun, isComplete, runReducer } from './engine'
+import { useEffect, useReducer, useRef } from 'react'
+import { useAgentSettings } from '../agents/settings'
+import { initialRun, isComplete, runReducer, type RunMode } from './engine'
 import type { ScenarioId } from './script'
 
 /** Real milliseconds between ticks. Short enough for the progress bars to
@@ -8,10 +9,14 @@ const TICK = 200
 
 /**
  * The run starts when the screen opens and stops when the screen closes. The
- * timer lives in an effect; the reducer itself stays pure.
+ * timer lives in an effect; the reducer itself stays pure, so the agent
+ * settings ride in on each tick rather than being read inside it.
  */
-export function useRun(scenario: ScenarioId) {
-  const [state, dispatch] = useReducer(runReducer, scenario, initialRun)
+export function useRun(scenario: ScenarioId, mode: RunMode = 'autonomous') {
+  const [state, dispatch] = useReducer(runReducer, { scenario, mode }, initialRun)
+  const { settings } = useAgentSettings()
+  const settingsRef = useRef(settings)
+  settingsRef.current = settings
   const live = state.running && !isComplete(state)
 
   useEffect(() => {
@@ -20,13 +25,13 @@ export function useRun(scenario: ScenarioId) {
     const id = window.setInterval(() => {
       const now = performance.now()
       // Clamped so a backgrounded tab does not jump the whole run on return.
-      dispatch({ type: 'tick', dt: Math.min(now - last, 500) })
+      dispatch({ type: 'tick', dt: Math.min(now - last, 500), settings: settingsRef.current })
       last = now
     }, TICK)
     return () => window.clearInterval(id)
   }, [live])
 
-  return { state, dispatch, complete: isComplete(state) }
+  return { state, dispatch, complete: isComplete(state), settings }
 }
 
 export type Run = ReturnType<typeof useRun>
