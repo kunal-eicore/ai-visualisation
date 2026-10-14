@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { Check } from 'lucide-react'
+import { Check, ChevronDown } from 'lucide-react'
+import { FIELD } from '@/components/workspace/field'
 import { cn } from '@/lib/cn'
 
 export type MenuItem = {
@@ -141,5 +142,65 @@ function SwitchMark({ on, disabled }: { on: boolean; disabled?: boolean }) {
         )}
       />
     </span>
+  )
+}
+
+/**
+ * A dropdown that reads as a field: the FIELD recipe as the trigger, `Menu`
+ * as the list. One component for the queue's filters, an agent's role and
+ * the intake rules, so they cannot drift apart.
+ */
+export function SelectMenu({
+  label,
+  value,
+  options,
+  onChange,
+  placeholder,
+  disabled,
+  id,
+  className,
+}: {
+  /** Accessible name of the trigger and the menu. */
+  label: string
+  value: string | null
+  options: { key: string; label: string }[]
+  onChange: (key: string) => void
+  /** Shown, muted, when `value` is null. */
+  placeholder?: string
+  disabled?: boolean
+  id?: string
+  /** Width and radius of the trigger. */
+  className?: string
+}) {
+  const current = options.find((o) => o.key === value)?.label
+  return (
+    <Menu
+      label={label}
+      value={value}
+      items={options}
+      onSelect={onChange}
+      trigger={({ open, toggle }) => (
+        <button
+          id={id}
+          type="button"
+          aria-label={id ? undefined : label}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          disabled={disabled}
+          onClick={toggle}
+          className={cn(
+            // cn() doesn't merge, so FIELD's w-full is dropped rather than overridden.
+            FIELD.replace('w-full ', ''),
+            'flex h-8 items-center justify-between gap-2 py-0 text-left',
+            'disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-disabled',
+            open && 'border-focus shadow-focus-field',
+            className,
+          )}
+        >
+          <span className={cn('truncate', !current && 'text-muted')}>{current ?? placeholder}</span>
+          <ChevronDown aria-hidden className={cn('h-4 w-4 shrink-0 text-muted transition-transform duration-base', open && 'rotate-180')} />
+        </button>
+      )}
+    />
   )
 }

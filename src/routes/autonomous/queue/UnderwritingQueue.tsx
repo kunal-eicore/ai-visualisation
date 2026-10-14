@@ -23,7 +23,7 @@ import { Chip } from '@/components/ui/Chip'
 import { Tabs } from '@/components/ui/Tabs'
 import { FIELD } from '@/components/workspace/field'
 import { cn } from '@/lib/cn'
-import { Menu, type MenuItem } from './Menu'
+import { Menu, SelectMenu, type MenuItem } from './Menu'
 import {
   PRIORITIES,
   PRIORITY_TONE,
@@ -316,8 +316,7 @@ export function UnderwritingQueue({
 
 // ------------------------------------------------------------- toolbar
 
-/** A filter dropdown, drawn with the same FIELD recipe as the search box so
- *  the toolbar reads as one row of inputs. */
+/** A filter dropdown: "Any …" clears it. */
 function FilterMenu({
   label,
   value,
@@ -331,32 +330,13 @@ function FilterMenu({
 }) {
   const any = `Any ${label.toLowerCase()}`
   return (
-    <Menu
+    <SelectMenu
       label={label}
-      value={value ?? 'any'}
-      items={[{ key: 'any', label: any }, ...options.map((o) => ({ key: o, label: o }))]}
-      onSelect={(k) => onChange(k === 'any' ? null : k)}
-      trigger={({ open, toggle }) => (
-        <button
-          type="button"
-          aria-label={label}
-          aria-haspopup="menu"
-          aria-expanded={open}
-          onClick={toggle}
-          className={cn(
-            // cn() doesn't merge, so FIELD's w-full is dropped rather than overridden.
-            FIELD.replace('w-full ', ''),
-            'flex h-8 w-[168px] items-center justify-between gap-2 rounded-lg py-0 text-left',
-            open && 'border-focus shadow-focus-field',
-          )}
-        >
-          <span className={cn('truncate', !value && 'text-muted')}>{value ?? any}</span>
-          <ChevronDown
-            aria-hidden
-            className={cn('h-4 w-4 shrink-0 text-muted transition-transform duration-base', open && 'rotate-180')}
-          />
-        </button>
-      )}
+      value={value}
+      placeholder={any}
+      options={[{ key: 'any', label: any }, ...options.map((o) => ({ key: o, label: o }))]}
+      onChange={(k) => onChange(k === 'any' ? null : k)}
+      className="w-[168px] rounded-lg"
     />
   )
 }

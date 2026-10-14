@@ -1,4 +1,4 @@
-import { Bot, Cable, GitCompareArrows, LayoutDashboard, Orbit, ScrollText, type LucideIcon } from 'lucide-react'
+import { Bot, Cable, GitCompareArrows, Inbox, LayoutDashboard, Orbit, ScrollText, type LucideIcon } from 'lucide-react'
 
 export type NavChild = {
   label: string
@@ -21,6 +21,7 @@ export type NavItem = { label: string; icon: LucideIcon; to: string; children?: 
  */
 export const PRIMARY_NAV: NavItem[] = [
   { label: 'Overview', icon: LayoutDashboard, to: '/overview' },
+  { label: 'Data Intake', icon: Inbox, to: '/intake' },
   {
     label: 'Evaluation',
     icon: GitCompareArrows,

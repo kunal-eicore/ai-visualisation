@@ -1,4 +1,4 @@
-import { Building2, Pause, Power, User } from 'lucide-react'
+import { Building2, CheckCheck, CircleX, Pause, Power, TriangleAlert, User, type LucideIcon } from 'lucide-react'
 import { TONE } from '@/components/ui/Badge'
 import { Throbber } from '@/components/ui/Throbber'
 import { cn } from '@/lib/cn'
@@ -7,6 +7,20 @@ import { useFlip } from './flip'
 import { OUTCOME_OF, SCRIPT_BY_ID } from './script'
 
 const FOCUS = 'focus-visible:outline-none focus-visible:shadow-focus'
+
+/**
+ * The three kinds of "needs your attention": a warning waits on information
+ * or a person, an error on a retry, an approval on a yes. Colour and icon
+ * together, so each reads without colour. The one source for the lane, the
+ * stopped cards and any band that borrows them (Data Intake).
+ */
+export type AttentionKind = 'warning' | 'error' | 'approval'
+
+export const ATTENTION_KIND: Record<AttentionKind, { tone: 'warning' | 'danger' | 'info'; icon: LucideIcon; surface: string; iconClass: string; reasonClass: string }> = {
+  warning: { tone: 'warning', icon: TriangleAlert, surface: 'border-warning bg-warning-bg', iconClass: 'text-warning-fg', reasonClass: 'text-subtle' },
+  error: { tone: 'danger', icon: CircleX, surface: 'border-danger bg-danger-bg', iconClass: 'text-danger-fg', reasonClass: 'text-danger-fg' },
+  approval: { tone: 'info', icon: CheckCheck, surface: 'border-info bg-info-bg', iconClass: 'text-info-fg', reasonClass: 'text-subtle' },
+}
 
 export function SegmentIcon({ id, className = 'h-3 w-3' }: { id: string; className?: string }) {
   const Icon = SCRIPT_BY_ID[id].row.segment === 'group' ? Building2 : User

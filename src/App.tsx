@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { Overview } from '@/routes/Overview'
+import { DataIntake } from '@/routes/intake/DataIntake'
 import { BenchmarkGap } from '@/routes/evaluation/gap/BenchmarkGap'
 import { BenchmarkGapV2 } from '@/routes/evaluation/gap/BenchmarkGapV2'
 import { BenchmarkGapV3 } from '@/routes/evaluation/gap/v3/BenchmarkGapV3'
@@ -19,6 +20,7 @@ export default function App() {
       <Route element={<AppShell />}>
         <Route index element={<Navigate to="/overview" replace />} />
         <Route path="overview" element={<Overview />} />
+        <Route path="intake" element={<DataIntake />} />
         {/* Group index redirects to the group's only built exploration. */}
         <Route path="evaluation" element={<Navigate to="/evaluation/benchmark-gap" replace />} />
         <Route path="evaluation/shadow-parity" element={<ShadowParity />} />

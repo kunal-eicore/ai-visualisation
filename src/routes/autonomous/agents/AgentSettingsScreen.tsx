@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { ChevronDown, Lock, Minus, Plus } from 'lucide-react'
+import { Lock, Minus, Plus } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Chip } from '@/components/ui/Chip'
 import { Switch } from '@/components/ui/Switch'
@@ -9,7 +9,7 @@ import { RailRow } from '@/components/workspace/Shell'
 import { FIELD } from '@/components/workspace/field'
 import { cn } from '@/lib/cn'
 import { CONNECTORS, KIND_LABEL, STATUS, type Connector } from '@/routes/harness/connectors/data'
-import { Menu } from '../queue/Menu'
+import { SelectMenu } from '../queue/Menu'
 import { STAGES } from '../run/script'
 import {
   MAX_CONCURRENT,
@@ -269,28 +269,13 @@ function ConnectorRow({ c, children }: { c: Connector; children: ReactNode }) {
 
 function RoleMenu({ value, onChange }: { value: StageId; onChange: (v: StageId) => void }) {
   return (
-    <Menu
+    <SelectMenu
+      id="agent-role"
       label="Role"
       value={value}
-      items={STAGES.map((s) => ({ key: s.id, label: s.label }))}
-      onSelect={(k) => onChange(k as StageId)}
-      trigger={({ open, toggle }) => (
-        <button
-          id="agent-role"
-          type="button"
-          aria-haspopup="menu"
-          aria-expanded={open}
-          onClick={toggle}
-          className={cn(
-            FIELD.replace('w-full ', ''),
-            'flex h-8 w-[200px] items-center justify-between gap-2 py-0 text-left',
-            open && 'border-focus shadow-focus-field',
-          )}
-        >
-          <span className="truncate">{STAGES[stageIndexOf(value)].label}</span>
-          <ChevronDown aria-hidden className={cn('h-4 w-4 shrink-0 text-muted transition-transform duration-base', open && 'rotate-180')} />
-        </button>
-      )}
+      options={STAGES.map((s) => ({ key: s.id, label: s.label }))}
+      onChange={(k) => onChange(k as StageId)}
+      className="w-[200px]"
     />
   )
 }

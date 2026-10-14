@@ -7,11 +7,11 @@ import type { QueueRow } from '../queue/data'
  * own fixtures; nothing here exists in onebuzz.
  */
 
-const FIRST = ['Aditi', 'Karan', 'Neha', 'Suresh', 'Pooja', 'Imran', 'Divya', 'Manoj', 'Shreya', 'Anil', 'Tanvi', 'Rahul', 'Bhavna', 'Yusuf', 'Isha', 'Varun']
-const LAST = ['Sharma', 'Nair', 'Gupta', 'Rao', 'Mehta', 'Qureshi', 'Pillai', 'Desai', 'Bose', 'Kapoor', 'Iyer', 'Saxena', 'Ghosh', 'Khan']
-const COMPANIES = ['Meridian Agro Pvt Ltd', 'Bluefin Shipping LLP', 'Sahyadri Hospitals Trust', 'Vertex Motors Ltd', 'Pinewood Retail Pvt Ltd', 'Kaveri Cement Ltd', 'Lumen Software Pvt Ltd', 'Harbour Freight Co', 'Indus Pharma Ltd', 'Greenleaf Hotels Pvt Ltd']
-const RETAIL_PLANS = ['Health Shield Plus', 'Health Shield Basic', 'Family Floater Gold', 'Family Floater Silver', 'Senior Care Classic']
-const GROUP_PLANS = ['Group Health Standard', 'Group Health Enhanced']
+export const FIRST = ['Aditi', 'Karan', 'Neha', 'Suresh', 'Pooja', 'Imran', 'Divya', 'Manoj', 'Shreya', 'Anil', 'Tanvi', 'Rahul', 'Bhavna', 'Yusuf', 'Isha', 'Varun']
+export const LAST = ['Sharma', 'Nair', 'Gupta', 'Rao', 'Mehta', 'Qureshi', 'Pillai', 'Desai', 'Bose', 'Kapoor', 'Iyer', 'Saxena', 'Ghosh', 'Khan']
+export const COMPANIES = ['Meridian Agro Pvt Ltd', 'Bluefin Shipping LLP', 'Sahyadri Hospitals Trust', 'Vertex Motors Ltd', 'Pinewood Retail Pvt Ltd', 'Kaveri Cement Ltd', 'Lumen Software Pvt Ltd', 'Harbour Freight Co', 'Indus Pharma Ltd', 'Greenleaf Hotels Pvt Ltd']
+export const RETAIL_PLANS = ['Health Shield Plus', 'Health Shield Basic', 'Family Floater Gold', 'Family Floater Silver', 'Senior Care Classic']
+export const GROUP_PLANS = ['Group Health Standard', 'Group Health Enhanced']
 const TYPES = ['New Business', 'Renewal', 'Portability', 'Roll Over']
 /** Weighted towards the clean path, as a real queue would be. */
 const STATUSES = ['under_review', 'under_review', 'under_review', 'underwriting', 'counter_offered', 'partial_accepted', 'rejected', 'info_required']

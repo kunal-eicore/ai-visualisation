@@ -581,11 +581,11 @@ export type ChatTurn = {
  * pick a model would be a configuration surface wearing a control's clothes.
  */
 export const AGENTS = {
-  docs: { label: 'Document reader', decisionClass: 'Proposal documents', rung: 'Autonomous' },
-  census: { label: 'Census', decisionClass: 'Member census', rung: 'Autonomous' },
-  covers: { label: 'Cover mapping', decisionClass: 'Cover schedule', rung: 'Hybrid' },
-  claims: { label: 'Claims', decisionClass: 'Claims history', rung: 'Hybrid' },
-  pricing: { label: 'Pricing', decisionClass: 'Premium rating', rung: 'AI-assisted' },
+  docs: { label: 'Document reader', decisionClass: 'Proposal documents', rung: 'Fully Agentic' },
+  census: { label: 'Census', decisionClass: 'Member census', rung: 'Fully Agentic' },
+  covers: { label: 'Cover mapping', decisionClass: 'Cover schedule', rung: 'Deterministic + Agent' },
+  claims: { label: 'Claims', decisionClass: 'Claims history', rung: 'Deterministic + Agent' },
+  pricing: { label: 'Pricing', decisionClass: 'Premium rating', rung: 'Deterministic + AI' },
 } as const
 
 export type AgentId = keyof typeof AGENTS

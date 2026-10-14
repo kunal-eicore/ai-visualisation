@@ -27,6 +27,10 @@ import from, or get imported by, any sibling project in this hub.
   fix the screen. Copy earns its place only when it is data, a label on a control,
   or a consequence the user cannot otherwise see. Rationale belongs in the doc or
   a code comment, never on the canvas. (DESIGN.md hard rule 8)
+- **Intent based is never touched.** The `intent` mode in
+  `routes/autonomous/modes.ts` stays exactly as it is: no edits, no renames, and
+  nothing in any other screen (Data Intake included) ever routes to it or lands
+  in it.
 - **Dark mode stays off** until the status triples gain Dark values in Figma —
   see the README. Do not add `dark:` classes.
 

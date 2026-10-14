@@ -9,9 +9,9 @@
  * it; Manual is the bare URL.
  */
 export const AUTONOMOUS_MODES = [
-  { id: 'manual', label: 'Manual' },
-  { id: 'hybrid', label: 'Hybrid' },
-  { id: 'autonomous', label: 'Autonomous' },
+  { id: 'manual', label: 'Deterministic' },
+  { id: 'hybrid', label: 'Deterministic + Agent' },
+  { id: 'autonomous', label: 'Fully Agentic' },
   { id: 'intent', label: 'Intent based' },
 ] as const
 

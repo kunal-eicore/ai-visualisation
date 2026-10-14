@@ -5,6 +5,7 @@ import { cn } from '@/lib/cn'
 /** Human labels for known path segments; falls back to title-casing. */
 const SEGMENT_LABELS: Record<string, string> = {
   overview: 'Overview',
+  intake: 'Data Intake',
   evaluation: 'Evaluation',
   'shadow-parity': 'Shadow Parity',
   workbench: 'Eval Workbench',

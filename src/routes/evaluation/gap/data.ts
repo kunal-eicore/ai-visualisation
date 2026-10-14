@@ -216,12 +216,12 @@ export const CALIBRATION: CalibrationBucket[] = [
  * ------------------------------------------------------------------ */
 
 /** The authority rung the class runs at — `AGENTS[*].rung` in the walkthrough. */
-export type Rung = 'AI-assisted' | 'Hybrid' | 'Autonomous'
+export type Rung = 'Deterministic + AI' | 'Deterministic + Agent' | 'Fully Agentic'
 
 export const RUNG_TONE: Record<Rung, Tone> = {
-  'AI-assisted': 'neutral',
-  Hybrid: 'info',
-  Autonomous: 'brand',
+  'Deterministic + AI': 'neutral',
+  'Deterministic + Agent': 'info',
+  'Fully Agentic': 'brand',
 }
 
 /**
@@ -405,7 +405,7 @@ export const CLASSES: DecisionClass[] = [
   {
     id: 'docs',
     name: 'Proposal documents',
-    rung: 'Autonomous',
+    rung: 'Fully Agentic',
     agent: 'Document reader',
     steps: ['Start Quotation', 'Business Details'],
     decides: 'What the pack says, and what the business record on the quotation therefore is.',
@@ -499,7 +499,7 @@ export const CLASSES: DecisionClass[] = [
   {
     id: 'census',
     name: 'Member census',
-    rung: 'Autonomous',
+    rung: 'Fully Agentic',
     agent: 'Census',
     steps: ['Member Details'],
     decides: 'How raw member rows become groups, age bands and a relationship matrix.',
@@ -594,7 +594,7 @@ export const CLASSES: DecisionClass[] = [
   {
     id: 'covers',
     name: 'Cover schedule',
-    rung: 'Hybrid',
+    rung: 'Deterministic + Agent',
     agent: 'Cover mapping',
     steps: ['Cover Details'],
     decides: 'Which product covers the requested benefits map onto, at what structure and what limit.',
@@ -682,7 +682,7 @@ export const CLASSES: DecisionClass[] = [
   {
     id: 'claims',
     name: 'Claims history',
-    rung: 'Hybrid',
+    rung: 'Deterministic + Agent',
     agent: 'Claims',
     steps: ['Claims and TPA'],
     decides: 'What the prior claims experience says about this risk, and who services it.',
@@ -771,7 +771,7 @@ export const CLASSES: DecisionClass[] = [
   {
     id: 'pricing',
     name: 'Premium rating',
-    rung: 'AI-assisted',
+    rung: 'Deterministic + AI',
     agent: 'Pricing',
     steps: ['Summary', 'Process Sheet'],
     decides: 'The loadings, the group split and the premium the quotation is prepared at.',

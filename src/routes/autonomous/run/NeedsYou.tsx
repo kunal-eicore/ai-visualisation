@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { CheckCheck, ChevronDown, ChevronUp, CircleX, TriangleAlert } from 'lucide-react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
 import { casesOf, needsPerson, stopReason, stoppedAt, type CaseState, type RunState } from './engine'
 import { useFlip } from './flip'
-import { SegmentIcon, clientOf } from './parts'
+import { ATTENTION_KIND, SegmentIcon, clientOf, type AttentionKind } from './parts'
 import { SCRIPT_BY_ID, STAGES } from './script'
 
 /** Cards in the lane before the rest go behind "Show all". */
@@ -56,27 +56,23 @@ export function NeedsYou({ state, onOpen }: { state: RunState; onOpen: (id: stri
       {/* One count per kind, not one total: a warning waits on information,
           an error on a retry, an approval on a yes, and each is worked
           differently. Icon as well as colour, so they read without colour. */}
-      {warnings > 0 && (
-        <span aria-label={`${warnings} ${warnings === 1 ? 'warning' : 'warnings'}`}>
-          <Badge tone="warning" icon={<TriangleAlert aria-hidden className="h-3 w-3" />}>
-            {warnings}
-          </Badge>
-        </span>
-      )}
-      {errors > 0 && (
-        <span aria-label={`${errors} ${errors === 1 ? 'error' : 'errors'}`}>
-          <Badge tone="danger" icon={<CircleX aria-hidden className="h-3 w-3" />}>
-            {errors}
-          </Badge>
-        </span>
-      )}
-      {approvals > 0 && (
-        <span aria-label={`${approvals} waiting for approval`}>
-          <Badge tone="info" icon={<CheckCheck aria-hidden className="h-3 w-3" />}>
-            {approvals}
-          </Badge>
-        </span>
-      )}
+      {(
+        [
+          ['warning', warnings, warnings === 1 ? 'warning' : 'warnings'],
+          ['error', errors, errors === 1 ? 'error' : 'errors'],
+          ['approval', approvals, 'waiting for approval'],
+        ] as [AttentionKind, number, string][]
+      ).map(([kind, n, noun]) => {
+        if (n === 0) return null
+        const { tone, icon: Icon } = ATTENTION_KIND[kind]
+        return (
+          <span key={kind} aria-label={`${n} ${noun}`}>
+            <Badge tone={tone} icon={<Icon aria-hidden className="h-3 w-3" />}>
+              {n}
+            </Badge>
+          </span>
+        )
+      })}
       {toggle && (
         <button
           type="button"
@@ -135,14 +131,14 @@ function StoppedCard({ c, onOpen }: { c: CaseState; onOpen: (id: string) => void
   const ref = useFlip<HTMLLIElement>(c.id)
   const s = SCRIPT_BY_ID[c.id]
   const failed = c.phase === 'failed'
-  const approval = c.phase === 'approval'
+  const kind = ATTENTION_KIND[failed ? 'error' : c.phase === 'approval' ? 'approval' : 'warning']
   const reason = stopReason(c)
   return (
     <li
       ref={ref}
       className={cn(
         'relative flex h-[84px] min-w-0 items-start gap-3 rounded-lg border px-4 py-3',
-        failed ? 'border-danger bg-danger-bg' : approval ? 'border-info bg-info-bg' : 'border-warning bg-warning-bg',
+        kind.surface,
       )}
     >
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -151,7 +147,7 @@ function StoppedCard({ c, onOpen }: { c: CaseState; onOpen: (id: string) => void
           {s.short} · {STAGES[c.stage].label}
         </span>
         <span className="truncate text-sm font-medium text-default">{clientOf(c.id)}</span>
-        <span title={reason} className={cn('truncate text-sm', failed ? 'text-danger-fg' : 'text-subtle')}>{reason}</span>
+        <span title={reason} className={cn('truncate text-sm', kind.reasonClass)}>{reason}</span>
       </div>
       <Button variant="neutral" size="sm" onClick={() => onOpen(c.id)}>
         Review

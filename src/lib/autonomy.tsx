@@ -73,7 +73,7 @@ export type Mode = {
 export const MODES: Record<ModeId, Mode> = {
   manual: {
     id: 'manual',
-    label: 'Manual',
+    label: 'Deterministic',
     icon: PencilLine,
     chat: 'off',
     templateImport: true,
@@ -83,7 +83,7 @@ export const MODES: Record<ModeId, Mode> = {
   },
   assisted: {
     id: 'assisted',
-    label: 'AI-assisted',
+    label: 'Deterministic + AI',
     icon: Sparkles,
     chat: 'launcher',
     templateImport: true,
@@ -93,7 +93,7 @@ export const MODES: Record<ModeId, Mode> = {
   },
   hybrid: {
     id: 'hybrid',
-    label: 'Hybrid',
+    label: 'Deterministic + Agent',
     icon: MessagesSquare,
     chat: 'open',
     templateImport: true,
@@ -103,7 +103,7 @@ export const MODES: Record<ModeId, Mode> = {
   },
   autonomous: {
     id: 'autonomous',
-    label: 'Autonomous',
+    label: 'Fully Agentic',
     icon: Bot,
     chat: 'open',
     templateImport: true,
