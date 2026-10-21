@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
+import { cn } from '@/lib/cn'
 
 /**
  * The house side panel. Geometry follows the Company profile edit panel
@@ -20,6 +21,7 @@ export function SidePanel({
   footer,
   bodyRef,
   marker,
+  half,
   children,
 }: {
   title: ReactNode
@@ -32,6 +34,8 @@ export function SidePanel({
   /** A data attribute the panel carries, so other layers can tell it is open
    *  (the attention overlay checks for the case drawer before taking Escape). */
   marker?: string
+  /** Half the screen instead of 720, never narrower than 720. */
+  half?: boolean
   children: ReactNode
 }) {
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -70,7 +74,11 @@ export function SidePanel({
         aria-modal="true"
         aria-label={typeof title === 'string' ? title : undefined}
         {...attrs}
-        className="fixed inset-y-0 right-0 z-50 flex w-[720px] max-w-full animate-sheet-in flex-col border-l border-default bg-surface-card shadow-panel"
+        className={cn(
+          'fixed inset-y-0 right-0 z-50 flex max-w-full',
+          half ? 'w-[max(720px,50vw)]' : 'w-[720px]',
+          'animate-sheet-in flex-col border-l border-default bg-surface-card shadow-panel',
+        )}
       >
         <header className="flex items-center gap-3 border-b border-default py-[18px] pl-6 pr-5">
           <div className="min-w-0">

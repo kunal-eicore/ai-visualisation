@@ -50,10 +50,12 @@ export type FieldEdit = {
 export type EditRun = {
   /** Identifies the write, so it can be taken back. */
   token: string
-  /** The step to navigate to before the write is shown. */
-  step: Step
-  /** The SectionCard to ring — the "area being modified". */
-  section: string
+  /** The step to navigate to before the write is shown. Left out when the
+   *  write starts on the step it changes, so the page does not jump. */
+  step?: Step
+  /** The SectionCard to ring — the "area being modified". Left out when the
+   *  surface draws its own ring on the rows being written. */
+  section?: string
   edits: FieldEdit[]
 }
 
@@ -138,17 +140,21 @@ export function AgentEditsProvider({
 
   const run = useCallback(
     ({ token, step, section, edits }: EditRun) => {
-      onNavigate(step)
-      setPending(edits.map((e) => e.field))
-      setLanded([])
+      const fields = edits.map((e) => e.field)
+      if (step) onNavigate(step)
+      /* Additive, so two writes in flight at once (Apply on one
+         recommendation, then another) each keep their own skeleton. */
+      setPending((p) => [...p.filter((f) => !fields.includes(f)), ...fields])
+      setLanded((l) => l.filter((f) => !fields.includes(f)))
 
       /* Two frames, not one. The step swaps on this render, so the section
          being rung does not exist until the next commit; asking for its
          position in the same frame scrolls to wherever the previous step's
          node was. */
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => ring(sections.current.get(section) ?? null, WRITE_MS + 200)),
-      )
+      if (section)
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => ring(sections.current.get(section) ?? null, WRITE_MS + 200)),
+        )
 
       timers.current.push(
         window.setTimeout(() => {
@@ -168,14 +174,16 @@ export function AgentEditsProvider({
             for (const e of edits) next[e.field] = e.value
             return next
           })
-          setPending([])
-          setLanded(edits.map((e) => e.field))
+          setPending((p) => p.filter((f) => !fields.includes(f)))
+          setLanded((l) => [...l, ...fields])
         }, WRITE_MS),
       )
 
       /* Release the reveal class, or a field that animated in once keeps the
          class and never animates again. */
-      timers.current.push(window.setTimeout(() => setLanded([]), WRITE_MS + 900))
+      timers.current.push(
+        window.setTimeout(() => setLanded((l) => l.filter((f) => !fields.includes(f))), WRITE_MS + 900),
+      )
     },
     [onNavigate],
   )
@@ -198,8 +206,9 @@ export function AgentEditsProvider({
       const { [token]: _spent, ...rest } = h
       return rest
     })
-    setPending(previous.map((e) => e.field))
-    setLanded([])
+    const fields = previous.map((e) => e.field)
+    setPending((p) => [...p.filter((f) => !fields.includes(f)), ...fields])
+    setLanded((l) => l.filter((f) => !fields.includes(f)))
 
     timers.current.push(
       window.setTimeout(() => {
@@ -208,11 +217,13 @@ export function AgentEditsProvider({
           for (const e of previous) next[e.field] = e.value
           return next
         })
-        setPending([])
-        setLanded(previous.map((e) => e.field))
+        setPending((p) => p.filter((f) => !fields.includes(f)))
+        setLanded((l) => [...l, ...fields])
       }, WRITE_MS),
     )
-    timers.current.push(window.setTimeout(() => setLanded([]), WRITE_MS + 900))
+    timers.current.push(
+      window.setTimeout(() => setLanded((l) => l.filter((f) => !fields.includes(f))), WRITE_MS + 900),
+    )
   }, [])
 
   const value = useMemo<AgentEditsValue>(

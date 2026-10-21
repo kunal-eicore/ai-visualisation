@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Bot, Cable, FlaskConical, GitCompareArrows, Orbit, ScrollText, Target, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Bot, Cable, FlaskConical, GitCompareArrows, Network, Orbit, ScrollText, Target, type LucideIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { Card } from '@/components/ui/Card'
 
@@ -72,6 +72,14 @@ const IDEAS: Idea[] = [
     icon: ScrollText,
     to: '/quotation/group-health',
     status: 'Built',
+  },
+  {
+    title: 'Knowledge Graph Recommendations',
+    description:
+      'Cover recommendations for group insurance quotations, derived from the knowledge graph and historical quotations, each one traceable back through the graph.',
+    icon: Network,
+    to: '/knowledge-graph/recommendations',
+    status: 'Idea',
   },
 ]
 

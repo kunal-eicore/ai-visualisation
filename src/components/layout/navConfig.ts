@@ -1,4 +1,4 @@
-import { Bot, Cable, GitCompareArrows, Inbox, LayoutDashboard, Orbit, ScrollText, type LucideIcon } from 'lucide-react'
+import { Bot, Cable, GitCompareArrows, Inbox, LayoutDashboard, Network, Orbit, ScrollText, type LucideIcon } from 'lucide-react'
 
 export type NavChild = {
   label: string
@@ -61,6 +61,12 @@ export const PRIMARY_NAV: NavItem[] = [
     icon: Bot,
     to: '/copilot',
     children: [{ label: 'UW Agent', to: '/copilot/uw-agent' }],
+  },
+  {
+    label: 'Knowledge Graph',
+    icon: Network,
+    to: '/knowledge-graph',
+    children: [{ label: 'Recommendations', to: '/knowledge-graph/recommendations' }],
   },
 ]
 

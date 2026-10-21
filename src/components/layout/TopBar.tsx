@@ -6,6 +6,8 @@ import { Breadcrumb } from './Breadcrumb'
 import { ModeSwitch } from './ModeSwitch'
 import { RunIndicator } from './RunIndicator'
 import { VersionSwitch } from './VersionSwitch'
+import { RecsViewSwitch } from './RecsViewSwitch'
+import { RECS_PATH } from '@/routes/knowledge-graph/views'
 import { AUTONOMOUS_PATH } from '@/routes/autonomous/modes'
 
 /**
@@ -45,6 +47,13 @@ export function TopBar() {
         {pathname === AUTONOMOUS_PATH && (
           <>
             <AutonomousModeSwitch />
+            <span aria-hidden className="h-6 w-px bg-neutral-200" />
+          </>
+        )}
+
+        {pathname === RECS_PATH && (
+          <>
+            <RecsViewSwitch />
             <span aria-hidden className="h-6 w-px bg-neutral-200" />
           </>
         )}

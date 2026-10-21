@@ -151,10 +151,19 @@ export function useAutonomy() {
  * journey would be asserting an authority setting over screens that have no
  * authority to set.
  */
-export function useAutonomyScope() {
-  const { setScoped } = useAutonomy()
+export function useAutonomyScope(locked?: ModeId) {
+  const { mode, setMode, setScoped } = useAutonomy()
   useEffect(() => {
+    /* A route that runs the journey at ONE rung pins it and leaves the
+       switch unclaimed, so the top bar offers no control it would ignore.
+       The rung it found is put back on the way out. */
+    if (locked) {
+      const before = mode.id
+      setMode(locked)
+      return () => setMode(before)
+    }
     setScoped(true)
     return () => setScoped(false)
-  }, [setScoped])
+    // `mode` is left out on purpose: the rung to restore is read once, on mount.
+  }, [locked, setMode, setScoped])
 }

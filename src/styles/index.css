@@ -79,6 +79,31 @@
      fall back to it when the flash clears. */
   .ring-attention { box-shadow: var(--ring-attention); }
 
+  /* The border on a table row while a write to it is in flight. A row
+     cannot carry a box-shadow of its own across collapsed cells, so each
+     cell draws its share: top and bottom on all of them, the sides on the
+     two ends. Inset, so the column widths do not move. */
+  .row-ring > td {
+    box-shadow: inset 0 2px 0 theme('colors.brand.400'), inset 0 -2px 0 theme('colors.brand.400');
+  }
+  .row-ring > td:first-child {
+    box-shadow: inset 2px 0 0 theme('colors.brand.400'), inset 0 2px 0 theme('colors.brand.400'),
+      inset 0 -2px 0 theme('colors.brand.400');
+  }
+  .row-ring > td:last-child {
+    box-shadow: inset -2px 0 0 theme('colors.brand.400'), inset 0 2px 0 theme('colors.brand.400'),
+      inset 0 -2px 0 theme('colors.brand.400');
+  }
+
+  /* A row with an open recommendation on it: brand edge on the left, faint
+     brand tint across. Cleared while the write's ring is up and once applied. */
+  .row-suggested > td {
+    background-color: theme('colors.brand.50');
+  }
+  .row-suggested > td:first-child {
+    box-shadow: inset 2px 0 0 theme('colors.brand.500');
+  }
+
   /* §2.7 — honour the OS reduce-motion setting. */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {

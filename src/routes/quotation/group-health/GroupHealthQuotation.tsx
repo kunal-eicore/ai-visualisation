@@ -4,7 +4,7 @@ import { CHAT_WIDTH, ChatDockHost } from '@/components/workspace/chat/ChatDockHo
 import { Button } from '@/components/ui/Button'
 import { Toast } from '@/components/ui/Toast'
 import { cn } from '@/lib/cn'
-import { useAutonomy, useAutonomyScope } from '@/lib/autonomy'
+import { useAutonomy, useAutonomyScope, type ModeId } from '@/lib/autonomy'
 import { useAgentRun } from '@/lib/agentRun'
 import { AgentEditsProvider } from './agentEdits'
 import { ChatDock } from './ChatDock'
@@ -74,8 +74,13 @@ type View = (typeof VIEWS)[number]
  * the action bar at the bottom. This mirrors the source screen, where the
  * primary action must stay reachable through a 3,616-row census.
  */
-export function GroupHealthQuotation() {
-  useAutonomyScope()
+export function GroupHealthQuotation({
+  lockedMode,
+}: {
+  /** Run at this one rung, with no mode switch in the top bar. */
+  lockedMode?: ModeId
+} = {}) {
+  useAutonomyScope(lockedMode)
   const { mode } = useAutonomy()
 
   const run = useAgentRun()

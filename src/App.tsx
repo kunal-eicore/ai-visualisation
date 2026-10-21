@@ -12,6 +12,7 @@ import { Harness } from '@/routes/harness/Harness'
 import { Connectors } from '@/routes/harness/connectors/Connectors'
 import { Autonomous } from '@/routes/autonomous/Autonomous'
 import { AgentSettingsScreen } from '@/routes/autonomous/agents/AgentSettingsScreen'
+import { Recommendations } from '@/routes/knowledge-graph/Recommendations'
 import { GroupHealthQuotation } from '@/routes/quotation/group-health/GroupHealthQuotation'
 
 export default function App() {
@@ -39,6 +40,8 @@ export default function App() {
         <Route path="autonomous/settings" element={<AgentSettingsScreen />} />
         <Route path="copilot" element={<Navigate to="/copilot/uw-agent" replace />} />
         <Route path="copilot/uw-agent" element={<UwAgent />} />
+        <Route path="knowledge-graph" element={<Navigate to="/knowledge-graph/recommendations" replace />} />
+        <Route path="knowledge-graph/recommendations" element={<Recommendations />} />
         <Route path="*" element={<Navigate to="/overview" replace />} />
       </Route>
     </Routes>
