@@ -4,6 +4,7 @@ import { ChevronDown, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { Logo } from './Logo'
 import { PRIMARY_NAV, SECONDARY_NAV, type NavItem } from './navConfig'
+import { useAuth, useCurrentUser } from '@/auth/useAuth'
 
 type SidebarProps = {
   /** Pinned collapsed state, toggled by the panel button. */
@@ -151,10 +152,13 @@ function rowClass(isActive: boolean, center = false) {
 }
 
 function SidebarFooter({ collapsed }: { collapsed: boolean }) {
+  const { signOut } = useAuth()
+  const user = useCurrentUser()
+
   // §4.12 — the avatar is a tone-tinted circle with a 1px border, never a bare fill.
   const avatar = (
     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-brand-300 bg-brand-50 text-xs font-bold text-brand">
-      AU
+      {user.initials}
     </span>
   )
 
@@ -166,9 +170,10 @@ function SidebarFooter({ collapsed }: { collapsed: boolean }) {
     <div className="flex h-16 items-center gap-3 border-t border-default px-4">
       {avatar}
       <div className="min-w-0 leading-tight">
-        <p className="truncate text-sm font-semibold text-default">Admin User</p>
+        <p className="truncate text-sm font-semibold text-default">{user.name}</p>
         <button
           type="button"
+          onClick={() => signOut()}
           className="rounded-sm text-xs text-muted transition-colors duration-base hover:text-default focus-visible:outline-none focus-visible:shadow-focus"
         >
           Sign out

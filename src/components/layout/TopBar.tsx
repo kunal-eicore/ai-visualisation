@@ -1,5 +1,7 @@
 import { Bell } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
+import { useAuth, useCurrentUser } from '@/auth/useAuth'
+import { Menu } from '@/routes/autonomous/queue/Menu'
 import { useAutonomy } from '@/lib/autonomy'
 import { AutonomousModeSwitch } from './AutonomousModeSwitch'
 import { Breadcrumb } from './Breadcrumb'
@@ -74,14 +76,34 @@ export function TopBar() {
           <span aria-hidden className="absolute right-2 top-2 h-2 w-2 rounded-full bg-danger-500 ring-2 ring-white" />
         </button>
 
-        <button
-          type="button"
-          aria-label="Account"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-brand-300 bg-brand-50 text-xs font-bold text-brand focus-visible:outline-none focus-visible:shadow-focus"
-        >
-          AU
-        </button>
+        <AccountMenu />
       </div>
     </header>
+  )
+}
+
+/** The avatar opens a one-item menu: Sign out. */
+function AccountMenu() {
+  const { signOut } = useAuth()
+  const user = useCurrentUser()
+  return (
+    <Menu
+      label="Account"
+      align="right"
+      items={[{ key: 'sign-out', label: 'Sign out' }]}
+      onSelect={() => signOut()}
+      trigger={({ open, toggle }) => (
+        <button
+          type="button"
+          aria-label={`Account: ${user.name}`}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          onClick={toggle}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-brand-300 bg-brand-50 text-xs font-bold text-brand focus-visible:outline-none focus-visible:shadow-focus"
+        >
+          {user.initials}
+        </button>
+      )}
+    />
   )
 }

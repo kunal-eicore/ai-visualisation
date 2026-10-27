@@ -3,4 +3,7 @@ dist
 *.tsbuildinfo
 vite.config.d.ts
 vite.config.js
+vite.login.config.js
+vite.login.config.d.ts
 .DS_Store
+*.local

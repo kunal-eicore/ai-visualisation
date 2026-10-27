@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
+import { RequireAuth } from '@/auth/RequireAuth'
 import { Overview } from '@/routes/Overview'
 import { DataIntake } from '@/routes/intake/DataIntake'
 import { BenchmarkGap } from '@/routes/evaluation/gap/BenchmarkGap'
@@ -18,7 +19,13 @@ import { GroupHealthQuotation } from '@/routes/quotation/group-health/GroupHealt
 export default function App() {
   return (
     <Routes>
-      <Route element={<AppShell />}>
+      <Route
+        element={
+          <RequireAuth>
+            <AppShell />
+          </RequireAuth>
+        }
+      >
         <Route index element={<Navigate to="/overview" replace />} />
         <Route path="overview" element={<Overview />} />
         <Route path="intake" element={<DataIntake />} />
